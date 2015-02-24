@@ -1,0 +1,55 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: none;
+	line-height: 16px;
+	font-size: 16px;
+	font-family: Lucida Console;
+	color: green;
+}
+
+body {
+	background: #222328;
+	padding: 2%;
+}
+
+.log {
+	color: gray;
+}
+
+#wrap {
+	padding: 5%;
+}
+
+#arrow {
+	float: left;
+}
+
+#input {
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+#speak {
+	outline: none !important;
+	display: block;
+	float: left;
+	width: 80%;
+	background: #222328;
+	color: green;
+	margin-left: 9px;
+}
+
+#speak::before {
+	content: "> ";
+}
+
+#button {
+	display: none;
+}
+
+footer {
+	color: gray;
+	font-size: 0.75em;
+	clear: both;
+}
