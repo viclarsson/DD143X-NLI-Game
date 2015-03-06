@@ -4,12 +4,15 @@ function Player (startRoom) {
 	this.addItem = function (item) {
 		this.items[item.getName()] = item;
 	}
-	this.hasItem = function (item) {
-		if(this.items[item.getName()] != undefined) {
+	this.hasItem = function (itemName) {
+		if(this.items[itemName] != undefined) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+	this.removeItem = function (item) {
+		delete this.items[item.getName()];
 	}
 }
 
@@ -24,8 +27,11 @@ function Room (name, desc, directions) {
 
 	// Array of exits
 	this.exits = {};
-	this.addExit = function (command, room) {
-		this.exits[command] = room;
+	this.addExit = function (commandString, room) {
+		this.exits[commandString] = room;
+	}
+	this.removeExit = function (commandString) {
+		delete this.exits[commandString];
 	}
 	this.getRoomFromExit = function(command) {
 		return this.exits[command];
@@ -42,13 +48,6 @@ function Room (name, desc, directions) {
 	this.removeItem = function (item) {
 		delete this.items[item.getName()];
 	}
-	this.getActionCommands = function () {
-		var actions = [];
-		for(i in this.items) {
-			actions.push(Object.keys(this.items[i].getActions()));
-		}
-		return actions;
-	}
 
 	this.getFullDesc = function () {
 		var itemList = "";
@@ -59,10 +58,11 @@ function Room (name, desc, directions) {
 	}
 }
 
-function Item (name, desc) {
+function Item (name, desc, takeable) {
 	this.name = name;
 	this.desc = desc;
 	this.adjective = "";
+	this.takeable = takeable;
 	this.actions = {};
 	this.addAction = function (command, actionFunction) {
 		this.actions[command] = actionFunction;

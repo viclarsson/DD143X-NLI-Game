@@ -1,12 +1,12 @@
 
 // Function for player input
 function said(string) {
-	$("#console").append("> " + string + "<br>");
+	$("#console").append("<br>> " + string + "<br>");
 }
 
 // Function for answering
 function reply(string) {
-	$("#console").append(string + "<br><br>")
+	$("#console").append(string + "<br>")
 }
 
 // Function for outputting text

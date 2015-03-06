@@ -7,9 +7,6 @@ function processCommand(stringArray) {
 	var word = null;
 	var nothing = true;
 
-	//var roomActions = PLAYER.currentRoom.getActionCommands();
-	//console.log(roomActions);
-
 	for(var i = 0; i < length;i++) {
 		word = stringArray[i];
 		if(jQuery.inArray(word, commands) != -1) {
@@ -43,32 +40,45 @@ function executeAction(command, params) {
 
 
 function executeCommand(command, params) {
-	console.log(params);
+	//console.log(params);
 	switch(command) {
 		case "go":
 		case "walk":
-		case "climb":
-			var newRoom = PLAYER.currentRoom.getRoomFromExit(params[0]);
-			if(newRoom == undefined) {
-				reply("Not possible...");
-				return;
-			}
-			if(newRoom.locked != "open") {
-				reply(newRoom.locked);
-				return;
-			}
-			PLAYER.currentRoom = newRoom;
-			reply(PLAYER.currentRoom.getFullDesc());
+		var newRoom = PLAYER.currentRoom.getRoomFromExit(params[0]);
+		if(newRoom == undefined) {
+			reply("Not possible...");
+			return;
+		}
+		if(newRoom.locked != "open") {
+			reply(newRoom.locked);
+			return;
+		}
+		PLAYER.currentRoom = newRoom;
+		reply(PLAYER.currentRoom.getFullDesc());
 		break;
 		case "take":
-			var item = PLAYER.currentRoom.items[params[0]];
-			console.log(item);
-			if(item == undefined) {
-				reply("There are no " + params[0] + " in here...");
-				return;
-			}
+		var item = PLAYER.currentRoom.items[params[0]];
+		if(item == undefined) {
+			reply("There are no " + params[0] + " in here...");
+			return;
+		}
+		if(item.takeable == "yes") {
 			PLAYER.addItem(item);
-			reply("You took the " + item.name + ".");
+			PLAYER.currentRoom.removeItem(item);
+			reply("You took the " + item.getName() + ".");
+		} else {
+			reply(item.takeable)
+		}
+		break;
+		case "drop":
+		var item = PLAYER.items[params[0]];
+		if(item == undefined) {
+			reply("You have no " + params[0] + " on you...");
+			return;
+		}
+		PLAYER.removeItem(item);
+		PLAYER.currentRoom.addItem(item);
+		reply("Dropped " + item.name + ".");
 		break;
 	}
 }
