@@ -1,8 +1,9 @@
 $(document).ready(function() {
-
 	// Welcome
 	log("JavaScript initialized and now ready!");
 	reply("Welcome to the game!");
+
+	reply(PLAYER.currentRoom.getFullDesc());
 
 	$("#speak").focus();
 
@@ -18,23 +19,8 @@ $(document).ready(function() {
 		var split_input = input.replace(/[^a-z ]/ig, "").toLowerCase().split(" ");
 		
 		// Do work
-
-		// Reply
-		reply("(Parsed as [" + split_input + "])");
+		if(processCommand(split_input)) {
+			reply(PLAYER.currentRoom.getFullDesc());
+		}
 	});
 });
-
-// Function for player input
-function said(string) {
-	$("#console").append("> " + string + "<br>");
-}
-
-// Function for answering
-function reply(string) {
-	$("#console").append(string + "<br><br>")
-}
-
-// Function for outputting text
-function log(string) {
-	$("#console").append('<span class="log">' + string + '<span><br><br>');
-}
