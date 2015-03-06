@@ -13,12 +13,14 @@ var ITEM_BOX = new Item("Box", "A large box is blocking your way into the lectur
 ITEM_BOX.addAction("move", function() {
 	reply("You move the box. Oh, wait, you didn't. It's too heavy.");
 });
-ITEM_BOX.addAction("break", function() {
-	if(PLAYER.hasItem("hammer")) {
+ITEM_BOX.addAction("break", function(params) {
+	if(!PLAYER.hasItem("hammer")) {
+		reply("You try to break the box but your lack of physical strength makes it impossible. You really got to sign up for a gym membership. Yeah, maybe next year.");
+	} else if(jQuery.inArray(ITEM_HAMMER.getName(), params) != -1) {
 		PLAYER.currentRoom.removeItem(ITEM_BOX);
 		reply("You break the box with the hammer. I told you it would prove useful! You can now go north into the lecture hall");
 	} else {
-		reply("You try to break the box but your lack of physical strength makes it impossible. You really got to sign up for a gym membership. Yeah, maybe next year.");
+		reply("Break with what?!");
 	}
 });
 ROOM_CORRIDOR.addItem(ITEM_BOX);
