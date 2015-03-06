@@ -1,11 +1,14 @@
 // Define dictionairy
-var commands = ["go", "walk", "take", "use", "talk", "speak"];
+var commands = ["go", "walk", "take", "drop"];
 var conjunction = ["and", "then"];
 
 function processCommand(stringArray) {
 	var length = stringArray.length;
 	var word = null;
 	var nothing = true;
+
+	//var roomActions = PLAYER.currentRoom.getActionCommands();
+	//console.log(roomActions);
 
 	for(var i = 0; i < length;i++) {
 		word = stringArray[i];
@@ -17,8 +20,8 @@ function processCommand(stringArray) {
 		} else if(jQuery.inArray(word, conjunction) != -1) {
 			// A conjunction
 			// Maybe fix output for this.		
-		} else {
-			console.log(word + ": Not a word but may be a usable item/NPC!");
+		} else if(executeAction(word, stringArray.slice(i+1, length))) {
+			return;
 		}
 	}
 	if(nothing) {
@@ -26,15 +29,32 @@ function processCommand(stringArray) {
 	}
 }
 
+function executeAction(command, params) {
+	var item;
+	for(i in params) {
+		item = PLAYER.currentRoom.getItem(params[i]);
+		if(item != undefined && item.actions[command] != undefined) {
+			item.actions[command](params);
+			return true;
+		}
+	}
+	return false;
+}
+
+
 function executeCommand(command, params) {
 	console.log(params);
 	switch(command) {
 		case "go":
 		case "walk":
 		case "climb":
-			var newRoom = PLAYER.currentRoom.getRoomFromExit(params[0])
+			var newRoom = PLAYER.currentRoom.getRoomFromExit(params[0]);
 			if(newRoom == undefined) {
 				reply("Not possible...");
+				return;
+			}
+			if(newRoom.locked != "open") {
+				reply(newRoom.locked);
 				return;
 			}
 			PLAYER.currentRoom = newRoom;
@@ -48,14 +68,7 @@ function executeCommand(command, params) {
 				return;
 			}
 			PLAYER.addItem(item);
-			reply("You took the " + item.name);
-		break;
-		case "use":
-			log("You used " + params[0]);
-		break;
-		case "talk":
-		case "speak":
-			log("You spoke " + params[0] + " " + params[1])
+			reply("You took the " + item.name + ".");
 		break;
 	}
 }
