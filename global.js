@@ -15,7 +15,7 @@ function log(string) {
 }
 
 // http://stackoverflow.com/questions/1119289/how-to-show-the-are-you-sure-you-want-to-navigate-away-from-this-page-when-ch
-window.onbeforeunload = function (e) {
+/*window.onbeforeunload = function (e) {
     // If we haven't been passed the event get the window.event
     e = e || window.event;
 
@@ -29,4 +29,4 @@ window.onbeforeunload = function (e) {
 
     // For Chrome, Safari, IE8+ and Opera 12+
     return message;
-};
+};*/

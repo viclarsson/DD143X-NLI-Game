@@ -1,6 +1,7 @@
 // Define dictionairy
 var commands = ["go", "walk", "take", "drop"];
 var conjunction = ["and", "then"];
+var itemPrepositions = ["a", "the"];
 
 function processCommand(stringArray) {
 	var length = stringArray.length;
@@ -57,9 +58,14 @@ function executeCommand(command, params) {
 		reply(PLAYER.currentRoom.getFullDesc());
 		break;
 		case "take":
-		var item = PLAYER.currentRoom.items[params[0]];
+		var paramId = 0;
+		// Check if it the words is like take _a_ or take _the_
+		if($.inArray(params[0], itemPrepositions)) {
+			paramId++;
+		}
+		var item = PLAYER.currentRoom.items[params[paramId]];
 		if(item == undefined) {
-			reply("There are no " + params[0] + " in here...");
+			reply("There are no " + params[paramId] + " in here...");
 			return;
 		}
 		if(item.takeable == "yes") {

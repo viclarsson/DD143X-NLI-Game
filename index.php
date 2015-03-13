@@ -27,13 +27,13 @@
 	</section>
 
 	<footer>
-Developed by Victor Larsson & Jesper Qvarfordt, 2015 for DD143X
+		Developed by Victor Larsson & Jesper Qvarfordt, 2015 for DD143X (Version <?php echo uniqueid(); ?>)
 	</footer>
 
 
 	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
-	<script src="speech.js"></script>
+	<script src="speech.js?version=<?php echo uniqueid(); ?>"></script>
 	<script src="objects.js"></script>
 	<script src="world.js"></script>
 	<script src="global.js"></script>
