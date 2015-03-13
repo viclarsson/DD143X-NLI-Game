@@ -34,10 +34,10 @@
 	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
 	<script src="speech.js?version=<?php echo uniqid(); ?>"></script>
-	<script src="objects.js?version=<?php echo uniqid(); ?>"></script>
-	<script src="world.js?version=<?php echo uniqid(); ?>"></script>
 	<script src="global.js?version=<?php echo uniqid(); ?>"></script>
 	<script src="command.js?version=<?php echo uniqid(); ?>"></script>
+	<script src="objects.js?version=<?php echo uniqid(); ?>"></script>
+	<script src="world.js?version=<?php echo uniqid(); ?>"></script>
 	<script src="game.js?version=<?php echo uniqid(); ?>"></script>
 </body>
 </html>

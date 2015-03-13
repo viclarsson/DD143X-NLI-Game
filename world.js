@@ -14,13 +14,24 @@ ITEM_BOX.addAction("move", function() {
 	reply("You move the box. Oh, wait, you didn't. It's too heavy.");
 });
 ITEM_BOX.addAction("break", function(params) {
-	if(!PLAYER.hasItem("hammer")) {
-		reply("You try to break the box but your lack of physical strength makes it impossible. You really got to sign up for a gym membership. Yeah, maybe next year.");
-	} else if(jQuery.inArray(ITEM_HAMMER.getName(), params) != -1) {
-		PLAYER.currentRoom.removeItem(ITEM_BOX);
-		reply("You break the box with the hammer. I told you it would prove useful! You can now go north into the lecture hall");
+	if($.inArray("with", params) == -1) {
+		// No with
+		reply("With what?!");
+		setQueuedAction("break", "box",  "hammer", "player"); // Should the item be in the room or on player?
 	} else {
-		reply("Break with what?!");
+		if($.inArray(ITEM_HAMMER.getName(), params) != -1) {
+			// Talks about hammer
+			if(PLAYER.hasItem("hammer")) {
+				PLAYER.currentRoom.removeItem(ITEM_BOX);
+				ROOM_LECTUREHALL.setLockedText("open")
+				reply("You break the box with the hammer. I told you it would prove useful! You can now go north into the lecture hall");
+			} else {
+				reply("You don't have the hammer! Look for it!");
+			}
+		} else {
+			// Talks about other item
+			reply("Don't think so...");
+		}
 	}
 });
 ROOM_CORRIDOR.addItem(ITEM_BOX);
@@ -30,13 +41,14 @@ ITEM_NERD.addAction("talk", function() {
 	reply("The nerd glares at you, mumbles something about the KTH code of honor and then gets back to his programming.");
 });
 ITEM_NERD.addAction("attack", function(params) {
-	if(!PLAYER.hasItem("hammer")) {
+	/*if(!PLAYER.hasItem("hammer")) {
 		reply("You want to attack the nerd but you lack a sufficient weapon...");
 	} else if(jQuery.inArray(ITEM_HAMMER.getName(), params) != -1) {
 		reply("In a blind rage you smack the nerd across the face with the hammer. As you come to your senses, you realize what you've done. Oh well, too late to regret it now. Back to business.");
 	} else {
 		reply("Attack with what?!");
-	}
+	}*/
+	reply("TODO: MUST FIX LIKE BREAK BOX!");
 });
 ROOM_CORRIDOR.addItem(ITEM_NERD);
 
