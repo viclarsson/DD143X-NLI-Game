@@ -14,12 +14,12 @@ ITEM_BOX.addAction("move", function() {
 	reply("You move the box. Oh, wait, you didn't. It's too heavy.");
 });
 ITEM_BOX.addAction("break", function(params) {
-	if($.inArray("with", params) == -1) {
+	if(!isMentioned("with", params)) {
 		// No with
 		reply("With what?!");
 		setQueuedAction("break", "box",  "hammer", "player"); // Should the item be in the room or on player?
 	} else {
-		if($.inArray(ITEM_HAMMER.getName(), params) != -1) {
+		if(isMentioned(ITEM_HAMMER.getName(), params)) {
 			// Talks about hammer
 			if(PLAYER.hasItem("hammer")) {
 				PLAYER.currentRoom.removeItem(ITEM_BOX);
@@ -41,19 +41,30 @@ ITEM_NERD.addAction("talk", function() {
 	reply("The nerd glares at you, mumbles something about the KTH code of honor and then gets back to his programming.");
 });
 ITEM_NERD.addAction("attack", function(params) {
-	/*if(!PLAYER.hasItem("hammer")) {
-		reply("You want to attack the nerd but you lack a sufficient weapon...");
-	} else if(jQuery.inArray(ITEM_HAMMER.getName(), params) != -1) {
-		reply("In a blind rage you smack the nerd across the face with the hammer. As you come to your senses, you realize what you've done. Oh well, too late to regret it now. Back to business.");
+	if(!isMentioned("with", params)) {
+		// No with
+		reply("With what?!");
+		// Define the "correct" item in the third argument. setQueuedAction(action, onItem, needItem, roomOrOnPlayer)
+		setQueuedAction("attack", "nerd",  "hammer", "player");
 	} else {
-		reply("Attack with what?!");
-	}*/
-	reply("TODO: MUST FIX LIKE BREAK BOX!");
+		if(isMentioned(ITEM_HAMMER.getName(), params)) {
+			// Talks about hammer
+			if(PLAYER.hasItem("hammer")) {
+				reply("In a blind rage you smack the nerd across the face with the hammer. As you come to your senses, you realize what you've done. Oh well, too late to regret it now. Back to business.");
+			} else {
+				reply("You don't have the hammer! Look for it!");
+			}
+		} else {
+			// Talks about other item
+			reply("You want to attack the nerd but you lack a sufficient weapon... Maybe something that lies around?");
+
+		}
+	}
 });
 ROOM_CORRIDOR.addItem(ITEM_NERD);
 
 // ==== LECTURE HALL ====
-var ROOM_LECTUREHALL = new Room ("Lecture hall", "As you enter the lecture hall you look at your watch realizing that you're 10 minutes late. But then again, you didn't choose the thug life. You find and empty seat and sit down. Mission accomplished. You finished the game!")
+var ROOM_LECTUREHALL = new Room ("Lecture hall", "As you enter the lecture hall you look at your watch realizing that you're 10 minutes late. But then again, you didn't choose the thug life. You find and empty seat and sit down. Mission accomplished. You finished the game!");
 ROOM_LECTUREHALL.setLockedText("A large box is in the way. You should try to break it or maybe move it if you have the strength!");
 ROOM_CORRIDOR.addExit("north", ROOM_LECTUREHALL);
 var PLAYER = new Player(ROOM_CORRIDOR);

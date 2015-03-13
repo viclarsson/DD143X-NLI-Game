@@ -25,13 +25,14 @@ function processCommand(stringArray) {
 
 	// If an action requests an item
 	if(WITH_ITEM != null) {
-			stringArray = [QUEUED_ACTION, ON_ITEM, "with", stringArray[0]];
-			length = stringArray.length;
+		stringArray = [QUEUED_ACTION, ON_ITEM, "with", stringArray[0]];
+		length = stringArray.length;
+		// Set null
+		WITH_ITEM = null;
+		ON_ITEM = null;
+		QUEUED_ACTION = null;
+		ITEM_IN_ROOM_OR_PLAYER = null;
 	}
-	WITH_ITEM = null;
-	ON_ITEM = null;
-	QUEUED_ACTION = null;
-	ITEM_IN_ROOM_OR_PLAYER = null;
 
 	console.log(stringArray);
 	if(!replyConfused) {
@@ -49,6 +50,11 @@ function processCommand(stringArray) {
 			// A conjunction
 			// Maybe fix output for this.		
 		} else if(executeAction(word, stringArray.slice(i+1, length), "room")) {
+			replyConfused = false;
+		}
+		if(WITH_ITEM != null) {
+			// Some request is needed in the sentence, we must know it!
+			reply("Wow, you have to so much to say, I like that, but sometimes it is too much... ");
 			return;
 		}
 	}
@@ -96,10 +102,9 @@ function executeCommand(command, params) {
 		reply(PLAYER.currentRoom.getFullDesc());
 		break;
 		case "take":
-		//var paramId = detectPreposition(0, params[0], prepositions);
 		var item = PLAYER.currentRoom.items[params[0]];
 		if(item == undefined) {
-			reply("There are no " + params[paramId] + " in here...");
+			reply("There are no " + params[0] + " in here...");
 			return;
 		}
 		if(item.takeable == "yes") {
@@ -111,10 +116,9 @@ function executeCommand(command, params) {
 		}
 		break;
 		case "drop":
-		//var paramId = detectPreposition(0, params[0], prepositions);
 		var item = PLAYER.items[params[0]];
 		if(item == undefined) {
-			reply("You have no " + params[paramId] + " on you...");
+			reply("You have no " + params[0] + " on you...");
 			return;
 		}
 		PLAYER.removeItem(item);
@@ -131,13 +135,10 @@ function setQueuedAction(commandToQueue, onItem, neededItemsList, itemLocation) 
 	ITEM_IN_ROOM_OR_PLAYER = itemLocation;
 }
 
-/*
-	Returns the next id if there is a preposition
-	*/
-	function detectPreposition(paramId, word, array) {
-		if($.inArray(word, array) != -1) {
-			console.log("Item preposition detected!");
-			paramId++;
-		}
-		return paramId;
+// Check if word is mentioned in the Array
+function isMentioned(word, array) {
+	if($.inArray(word, array) != -1) {
+		return true;
 	}
+	return false;
+}
