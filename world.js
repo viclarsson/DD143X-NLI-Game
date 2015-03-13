@@ -38,7 +38,7 @@ ITEM_NERD.addAction("attack", function(params) {
 		reply("Attack with what?!");
 	}
 });
-	ROOM_CORRIDOR.addItem(ITEM_NERD);
+ROOM_CORRIDOR.addItem(ITEM_NERD);
 
 // ==== LECTURE HALL ====
 var ROOM_LECTUREHALL = new Room ("Lecture hall", "As you enter the lecture hall you look at your watch realizing that you're 10 minutes late. But then again, you didn't choose the thug life. You find and empty seat and sit down. Mission accomplished. You finished the game!")

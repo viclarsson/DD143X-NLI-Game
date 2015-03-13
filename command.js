@@ -1,12 +1,21 @@
 // Define dictionairy
 var commands = ["go", "walk", "take", "drop"];
 var conjunction = ["and", "then"];
-var itemPrepositions = ["a", "the"];
+var prepositions = ["to", "a", "the"];
 
 function processCommand(stringArray) {
 	var length = stringArray.length;
 	var word = null;
 	var nothing = true;
+
+	// Remove prepositions
+	var tmp = []
+	for(var i = 0; i < length;i++) {
+		if(jQuery.inArray(stringArray[i], prepositions) == -1) {
+			tmp.push(stringArray[i]);
+		}
+	}
+	stringArray = tmp;
 
 	for(var i = 0; i < length;i++) {
 		word = stringArray[i];
@@ -29,8 +38,11 @@ function processCommand(stringArray) {
 
 function executeAction(command, params) {
 	var item;
+	// Try to find items
 	for(i in params) {
+		// In the room
 		item = PLAYER.currentRoom.getItem(params[i]);
+		// Execute the action with the item found if possible
 		if(item != undefined && item.actions[command] != undefined) {
 			item.actions[command](params);
 			return true;
@@ -58,12 +70,8 @@ function executeCommand(command, params) {
 		reply(PLAYER.currentRoom.getFullDesc());
 		break;
 		case "take":
-		var paramId = 0;
-		// Check if it the words is like take _a_ or take _the_
-		if($.inArray(params[0], itemPrepositions)) {
-			paramId++;
-		}
-		var item = PLAYER.currentRoom.items[params[paramId]];
+		//var paramId = detectPreposition(0, params[0], prepositions);
+		var item = PLAYER.currentRoom.items[params[0]];
 		if(item == undefined) {
 			reply("There are no " + params[paramId] + " in here...");
 			return;
@@ -77,9 +85,10 @@ function executeCommand(command, params) {
 		}
 		break;
 		case "drop":
+		//var paramId = detectPreposition(0, params[0], prepositions);
 		var item = PLAYER.items[params[0]];
 		if(item == undefined) {
-			reply("You have no " + params[0] + " on you...");
+			reply("You have no " + params[paramId] + " on you...");
 			return;
 		}
 		PLAYER.removeItem(item);
@@ -88,3 +97,14 @@ function executeCommand(command, params) {
 		break;
 	}
 }
+
+/*
+	Returns the next id if there is a preposition
+	*/
+	function detectPreposition(paramId, word, array) {
+		if($.inArray(word, array) != -1) {
+			console.log("Item preposition detected!");
+			paramId++;
+		}
+		return paramId;
+	}
