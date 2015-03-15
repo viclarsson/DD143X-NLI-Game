@@ -11,7 +11,7 @@ $(document).ready(function() {
 		e.preventDefault();
 
 		// Get the input
-		var input = $("#speak").val();
+		var input = $("#speak").val().trim();
 		said(input); // Ouput what said
 		$("#speak").val(""); // Reset input
 
@@ -20,7 +20,7 @@ $(document).ready(function() {
 		
 		// Do work
 		if(processCommand(split_input)) {
-			reply(PLAYER.currentRoom.getFullDesc());
+			reply(PLAYER.getRoomDescription());
 		}
 	});
 });

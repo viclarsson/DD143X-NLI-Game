@@ -1,5 +1,8 @@
 function Player (startRoom) {
 	this.currentRoom = startRoom;
+	this.getRoomDescription = function() {
+		return PLAYER.currentRoom.getFullDesc();
+	}
 	this.items = {};
 	this.addItem = function (item) {
 		this.items[item.getName()] = item;
@@ -13,6 +16,13 @@ function Player (startRoom) {
 	}
 	this.removeItem = function (item) {
 		delete this.items[item.getName()];
+	}
+	this.getInventoryList = function (item) {
+		var itemList = "";
+		for (i in this.items) { 
+			itemList += " " + this.items[i].name;
+		}
+		return itemList;
 	}
 }
 
@@ -54,7 +64,15 @@ function Room (name, desc, directions) {
 		for (i in this.items) { 
 			itemList += " " + this.items[i].desc;
 		}
-		return (desc + " " + directions + itemList).trim();
+		return (desc + " " + directions + this.getRoomItemList()).trim();
+	}
+
+	this.getRoomItemList = function () {
+		var itemList = "";
+		for (i in this.items) { 
+			itemList += " " + this.items[i].desc;
+		}
+		return itemList;
 	}
 }
 

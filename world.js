@@ -17,7 +17,7 @@ ITEM_BOX.addAction("break", function(params) {
 	if(!isMentioned("with", params)) {
 		// No with
 		reply("With what?!");
-		setQueuedAction("break", "box",  "hammer", "player"); // Should the item be in the room or on player?
+		setQueuedAction("break", "box", ["with"]); // Should the item be in the room or on player?
 	} else {
 		if(isMentioned(ITEM_HAMMER.getName(), params)) {
 			// Talks about hammer
@@ -45,7 +45,7 @@ ITEM_NERD.addAction("attack", function(params) {
 		// No with
 		reply("With what?!");
 		// Define the "correct" item in the third argument. setQueuedAction(action, onItem, needItem, roomOrOnPlayer)
-		setQueuedAction("attack", "nerd",  "hammer", "player");
+		setQueuedAction("break", "box", ["with"]); // Should the item be in the room or on player?
 	} else {
 		if(isMentioned(ITEM_HAMMER.getName(), params)) {
 			// Talks about hammer
