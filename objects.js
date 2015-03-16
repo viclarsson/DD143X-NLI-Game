@@ -20,7 +20,7 @@ function Player (startRoom) {
 	this.getInventoryList = function (item) {
 		var itemList = "";
 		for (i in this.items) { 
-			itemList += " " + this.items[i].name;
+			itemList += " " + this.items[i].description;
 		}
 		return itemList;
 	}
@@ -61,25 +61,23 @@ function Room (name, desc, directions) {
 
 	this.getFullDesc = function () {
 		var itemList = "";
-		for (i in this.items) { 
-			itemList += " " + this.items[i].desc;
-		}
 		return (desc + " " + directions + this.getRoomItemList()).trim();
 	}
 
 	this.getRoomItemList = function () {
 		var itemList = "";
 		for (i in this.items) { 
-			itemList += " " + this.items[i].desc;
+			itemList += " " + this.items[i].roomDescription;
 		}
 		return itemList;
 	}
 }
 
-function Item (name, desc, takeable) {
+function Item (name, itemDesc, roomDesc, takeable) {
 	this.name = name;
-	this.desc = desc;
-	this.adjective = "";
+	this.description = itemDesc;
+	this.roomDescription = roomDesc;
+	this.state = "";
 	this.takeable = takeable;
 	this.actions = {};
 	this.addAction = function (command, actionFunction) {

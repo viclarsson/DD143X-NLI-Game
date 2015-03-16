@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	// Welcome
 	log("JavaScript initialized and now ready!");
-	reply("Welcome to the game!");
+	reply("Welcome to the game! Your objective is to reach the lecture hall because you are late!<br><br>");
 
 	reply(PLAYER.currentRoom.getFullDesc());
 

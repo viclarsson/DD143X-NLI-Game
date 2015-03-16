@@ -1,5 +1,5 @@
 // Define dictionairy
-var commands = ["go", "walk", "take", "drop", "look", "inventory", "check"];
+var commands = ["go", "walk", "take", "grab", "drop", "leave", "look", "inventory", "check"];
 var conjunction = ["and", "then"];
 var prepositions = ["to", "a", "the", "out"];
 
@@ -48,7 +48,7 @@ function processCommand(stringArray) {
 		} else if($.inArray(word, conjunction) != -1) {
 			var doNothing = null; //Dummy
 		}
-		if(executeAction(word, stringArray.slice(i+1, length), "room")) {
+		if(executeAction(word, stringArray.slice(i+1, length))) {
 			// Executed action!
 		} else {
 			//replyConfused = true;
@@ -61,21 +61,19 @@ function processCommand(stringArray) {
 	if(replyConfused) {
 		reply("I didn't understand all of that...");
 	}
+	// Scroll to bottom
+	window.scrollTo(0,document.body.scrollHeight);
 }
 
 function executeAction(command, params, itemInRoomOrPlayer) {
 	console.log("Action: " + command + ", " + params);
-	var item;
+	var item = null;
 	// Try to find items
 	for(i in params) {
 		// In the room
-		if(itemInRoomOrPlayer == "room") {
-			item = PLAYER.currentRoom.getItem(params[i]);
-		} else {
-			item = PLAYER.items[params[i]];
-		}
+		item = getItemIfReachable(params[i]);
 		// Execute the action with the item found if possible
-		if(item != undefined && item.actions[command] != undefined) {
+		if(item != null && item.actions[command] != undefined) {
 			item.actions[command](params);
 			return true;
 		}
@@ -102,9 +100,14 @@ function executeCommand(command, params) {
 		reply(PLAYER.currentRoom.getFullDesc());
 		break;
 		case "take":
+		case "grab":
+		if(params[0] == "all") {
+			reply("You have to take all items seperately.");
+			return;
+		}
 		var item = PLAYER.currentRoom.items[params[0]];
 		if(item == undefined) {
-			reply("There are no " + params[0] + " in here...");
+			reply("There is no " + params[0] + " in here...");
 			return;
 		}
 		if(item.takeable == "yes") {
@@ -116,6 +119,7 @@ function executeCommand(command, params) {
 		}
 		break;
 		case "drop":
+		case "leave":
 		var item = PLAYER.items[params[0]];
 		if(item == undefined) {
 			reply("You have no " + params[0] + " on you...");
@@ -129,7 +133,14 @@ function executeCommand(command, params) {
 		reply(PLAYER.getRoomDescription());
 		break;
 		case "inventory":
-		reply(PLAYER.getInventoryList());
+		var inventoryList =  PLAYER.getInventoryList();
+		console.log("/" + inventoryList + "/");
+		if(inventoryList == "") {
+			reply("You don't have anything on you.");
+		} else {
+			reply("You currenly have: " + inventoryList);
+		}
+		return;
 		break;
 		case "check":
 		if(params[0] == undefined) {
@@ -141,7 +152,10 @@ function executeCommand(command, params) {
 			if(params[0] == "room") {
 				reply(PLAYER.getRoomDescription());
 				return;
-			} else {
+			} else if(params[0] == "inventory") {
+				executeAction("inventory", [], "player");
+				return;
+			}else {
 				var item = getItemIfReachable(params[0]);
 				if(item != null) {
 					reply(item.desc);
@@ -156,13 +170,11 @@ function executeCommand(command, params) {
 	}
 }
 
-//function setQueuedAction(commandToQueue, onItem, neededItemsList, itemLocation, additionalParameters) {
-	function setQueuedAction(commandToQueue, onItem, additionalParameters) {
-	//WITH_ITEM = neededItemsList;
+// To queue a query
+function setQueuedAction(commandToQueue, onItem, additionalParameters) {
 	ON_ITEM = onItem;
 	QUEUED_ACTION = commandToQueue;
 	ADDITIONAL_PARAMS = additionalParameters;
-	//ITEM_IN_ROOM_OR_PLAYER = itemLocation;
 }
 
 // Check if word is mentioned in the Array
