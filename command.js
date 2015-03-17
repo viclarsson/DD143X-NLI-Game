@@ -1,9 +1,11 @@
 // Define dictionairy
 var commands = ["go", "walk", "take", "grab", "drop", "leave", "look", "inventory", "check"];
+var GLOBAL_ACTIONS = [];
 var conjunction = ["and", "then"];
 var prepositions = ["to", "a", "the", "out"];
 
 // For answeing to "with what";
+var PREVIOUS_COMMAND_OR_ACTION = null;
 var WITH_ITEM = null;
 var ON_ITEM = null;
 var ITEM_IN_ROOM_OR_PLAYER = null;
@@ -24,7 +26,7 @@ function processCommand(stringArray) {
 	}
 	stringArray = tmp;
 	// If an action requests an item and then make a new complete request string
-	if(QUEUED_ACTION != null) {
+	if(QUEUED_ACTION != null && !isMentioned(stringArray[0], GLOBAL_ACTIONS) && !isMentioned(stringArray[0], commands)) {
 		tmp = [QUEUED_ACTION];
 		if (ON_ITEM != null) {
 			tmp = tmp.concat([ON_ITEM]);
@@ -44,14 +46,17 @@ function processCommand(stringArray) {
 		word = stringArray[i];
 		if($.inArray(word, commands) != -1) {
 			executeCommand(word, stringArray.slice(i+1, length));
+			PREVIOUS_COMMAND_OR_ACTION = word;
 			// Executed command
 		} else if($.inArray(word, conjunction) != -1) {
 			var doNothing = null; //Dummy
 		}
 		if(executeAction(word, stringArray.slice(i+1, length))) {
 			// Executed action!
+			PREVIOUS_COMMAND_OR_ACTION = word;
 		} else {
 			//replyConfused = true;
+			PREVIOUS_COMMAND_OR_ACTION = word;
 		}
 		if(WITH_ITEM != null) {
 			reply("Wow, you have to so much to say, I like that, but sometimes it is too much...");
@@ -67,6 +72,7 @@ function processCommand(stringArray) {
 
 function executeAction(command, params, itemInRoomOrPlayer) {
 	console.log("Action: " + command + ", " + params);
+	console.log(PREVIOUS_COMMAND_OR_ACTION);
 	var item = null;
 	// Try to find items
 	for(i in params) {

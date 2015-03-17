@@ -81,6 +81,7 @@ function Item (name, itemDesc, roomDesc, takeable) {
 	this.takeable = takeable;
 	this.actions = {};
 	this.addAction = function (command, actionFunction) {
+		GLOBAL_ACTIONS.push(command);
 		this.actions[command] = actionFunction;
 	}
 	this.getActions = function () {
