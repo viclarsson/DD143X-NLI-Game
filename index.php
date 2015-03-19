@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<button id="startSpeech">Start Speech</button>
+	<button id="startSpeech">Speech disabled!</button>
 	<section id="console">
 	</section>
 	<section id="input">

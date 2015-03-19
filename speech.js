@@ -1,5 +1,6 @@
  var finalTranscript = '';
  var recognizing = false;
+ var USE_SPEECH = false;
 
  $(document).ready(function() {
 
@@ -11,7 +12,7 @@
             // Create the recognition object and define the event handlers
 
             var recognition = new webkitSpeechRecognition();
-            var keepAlive = true;
+            var keepAlive = false;
             recognition.continuous = true;         // keep processing input until stopped
             recognition.interimResults = true;     // show interim results
             recognition.lang = 'en-US';           // specify the language
@@ -19,21 +20,25 @@
             recognition.onstart = function() {
             	recognizing = true;
             	console.log('Speak slowly and clearly');
-            	$('#startSpeech').html('Click to Stop');
+            	$('#startSpeech').html('Release space to end speech input');
             };
 
             recognition.onerror = function(event) {
-            	console.log(event.error);
+            	console.log("Speech error: " + event.error);
             };
 
             recognition.onend = function() {
-            	if(!keepAlive) {
+                $('#startSpeech').html('Hold space to talk!');
+                recognizing = false;
+                recognition.stop();
+            /*if(!keepAlive) {
             	recognizing = false;
             	console.log("Ended");
             	} else {
             		recognition.start();
             		console.log("Kept alive.");
             	}
+                */
             };
 
             recognition.onresult = function(event) {
@@ -54,29 +59,39 @@
                 	$("#speak").val(finalTranscript);
                 	finalTranscript = "";
                 	$("#form").submit();
-                	//console.log("FINAL:" + finalTranscript);
-                	//recognition.stop();
-                	//recognition.start();
-                	//$('#startSpeech').html('Click to Start Again');
-                	//recognizing = false;
                 }
             };
 
             $("#startSpeech").click(function(e) {
             	e.preventDefault();
+                if(!USE_SPEECH) {
+                    USE_SPEECH = true;
+                     $('#startSpeech').html('Hold space to talk!');
+                } else {
+                    USE_SPEECH = false;
 
-            	if (recognizing) {
-            		recognition.stop();
-            		$('#startSpeech').html('Click to Start Again');
-            		recognizing = false;
-            	} else {
-            		finalTranscript = '';
-                    // Request access to the User's microphone and Start recognizing voice input
-                    recognition.start();
-                    console.log('Allow the browser to use your Microphone');
-                    $('#startSpeech').html('waiting');
-                    //$('#transcript').html('&nbsp;');
+                    $(this).html("Speech disabled!");
                 }
             });
-        }
-    });
+
+            document.onkeydown = function(e) {
+                if(USE_SPEECH) {
+                    if (e.keyCode == 0 || e.keyCode == 32) {
+                        console.log('Space down!');
+                        if(!recognizing) {
+                            recognizing = true;
+                            finalTranscript = '';
+                            recognition.start();
+                        }
+                    }
+                }
+            }
+            document.onkeyup = function(e) {
+                if(USE_SPEECH) {
+                 finalTranscript = '';
+                 recognizing = false;
+                 recognition.stop();
+             }
+         }
+     }
+ });

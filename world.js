@@ -97,7 +97,7 @@ ITEM_BOTTLE.addAction("fill", function(params) {
 						reply("You fill the bottle with toilet water because doing that makes perfect sense. Your empty bottle just transformed into… a water bottle. Amazing!");
 
 					} else {
-						reply("You decide to do the sane thing and fill the bottle in the sink instead of the toilet. Good for you. Just don’t expect and award. Your empty bottle just transformed into… a water bottle. Shocking!");
+						reply("You decide to do the sane thing and fill the bottle in the sink instead of the toilet. Good for you. Just don’t expect an award. Your empty bottle just transformed into… a water bottle. Shocking!");
 					}
 					return;
 				} else {
@@ -123,18 +123,19 @@ ITEM_COMPUTER.addAction("use", function() {
 });
 ROOM_YELLOW.addItem(ITEM_COMPUTER);
 
-var ITEM_VIGGO = new Item ("Viggo", "Viggo Kann", "Viggo Kann is sitting by a desk reading a NP-hard book. He’s holding the book upside down but seems to be enjoying it nonetheless. Better not point it out or he might give you a bad grade.", "Not sure thats a good idea...");
-ITEM_VIGGO.addAction("talk", function(){
+var ITEM_MICHAEL = new Item ("Michael", "Michael", "Michael is sitting by a desk reading a NP-hard book. Why don't you speak to him?", "Not sure thats a good idea...");
+ITEM_MICHAEL.addAction("talk", function(){
 	if(PLAYER.hasItem("key")){
-		reply("Viggo looks at you and nods, then keeps on reading.");
+		reply("Michael looks at you and nods, then keeps on reading.");
 	}else{
-		reply("Viggo looks up at you with a confused look on his face, he tells you he’s thirsty then keeps on reading.");
+		reply("Michael looks up at you, he tells you he’s thirsty then keeps on reading. Maybe you could help him.");
 	}
 });
+ITEM_MICHAEL.addAction("speak", ITEM_MICHAEL.actions["talk"]);
 
 // KEY TO GIVE
 var ITEM_KEY = new Item("key", "A shiny key.", "A key lies in the room.", "yes");
-ITEM_VIGGO.addAction("give", function(params){
+ITEM_MICHAEL.addAction("give", function(params){
 	if(isMentioned("bottle", params)){
 		if(PLAYER.hasItem("bottle")){
 			// Has bottle
@@ -142,7 +143,7 @@ ITEM_VIGGO.addAction("give", function(params){
 				reply("The bottle is empty, better fill it with something first.");
 				return;
 			} else {
-				reply("Viggo accepts the water bottle. He stands up and chugs it in one go, you are mildly impressed. He then takes out a key from his pocket and gives it to you before going back to reading.");
+				reply("Michael accepts the water bottle. He stands up and chugs it in one go, you are mildly impressed. He then takes out a key from his pocket and gives it to you before going back to reading.");
 				PLAYER.removeItem(ITEM_BOTTLE);
 				PLAYER.addItem(ITEM_KEY);
 				ROOM_RED.setLockedText("open");
@@ -153,10 +154,10 @@ ITEM_VIGGO.addAction("give", function(params){
 			return;
 		}
 	} else {
-		reply("Viggo doesn't want this!");
+		reply("Michael doesn't want this!");
 	}
 });
-ROOM_YELLOW.addItem(ITEM_VIGGO);
+ROOM_YELLOW.addItem(ITEM_MICHAEL);
 
 // ==== BATHROOM ====
 var ROOM_BATHROOM = new Room("Bathroom", "You are in the bathroom", "To the north is the corridor.");
