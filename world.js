@@ -31,6 +31,7 @@ ITEM_BOX.addAction("break", function(params) {
 		}
 	}
 });
+ITEM_BOX.addAction("smash", ITEM_BOX.actions["break"]);
 ROOM_CORRIDOR.addItem(ITEM_BOX);
 
 var ITEM_NERD = new Item("nerd", "A nerd.", "Some nerd is programming on his Macbook. What a hipster. Better keep it down though, wouldn’t want to disturb him.", "Are you out of your mind?!");
@@ -85,11 +86,11 @@ ITEM_BOTTLE.addAction("fill", function(params) {
 			// We are in the bathroom
 			if(!isMentioned("using", params)) {
 				// No with
-				reply("Fill bottle using the sink or the toilet?");
+				reply("Fill bottle using the tap or the toilet?");
 				setQueuedAction("fill", "bottle", ["using"]);
 			} else {
 				// Mentioned
-				if(isMentioned("toilet", params) || isMentioned("sink", params)) {
+				if(isMentioned("toilet", params) || isMentioned("tap", params)) {
 					PLAYER.items["bottle"].state = "full";
 					PLAYER.items["bottle"].description = "A bottle filled with water.";
 					if(isMentioned("toilet", params)) {
@@ -97,7 +98,7 @@ ITEM_BOTTLE.addAction("fill", function(params) {
 						reply("You fill the bottle with toilet water because doing that makes perfect sense. Your empty bottle just transformed into… a water bottle. Amazing!");
 
 					} else {
-						reply("You decide to do the sane thing and fill the bottle in the sink instead of the toilet. Good for you. Just don’t expect an award. Your empty bottle just transformed into… a water bottle. Shocking!");
+						reply("You decide to do the sane thing and fill the bottle with water from the tap instead of the toilet. Good for you. Just don’t expect an award. Your empty bottle just transformed into… a water bottle. Shocking!");
 					}
 					return;
 				} else {
@@ -112,6 +113,7 @@ ITEM_BOTTLE.addAction("fill", function(params) {
 		return;
 	}
 });
+ITEM_BOTTLE.addAction("use", ITEM_BOTTLE.actions["fill"]);
 ROOM_ORANGE.addItem(ITEM_BOTTLE);
 
 // ==== YELLOW ====
@@ -171,7 +173,7 @@ ROOM_BATHROOM.addItem(ITEM_NUMBER);
 var ITEM_TOILET = new Item("Toilet", "A toilet", "There is a toilet bowl by the opposite wall.", "Why would you ever want to bring this with you?");
 ROOM_BATHROOM.addItem(ITEM_TOILET);
 
-var ITEM_SINK = new Item("Sink", "A sink", "A sink is attached to the wall.", "You try to remove it from the wall but it is stuck.");
+var ITEM_TAP = new Item("Tap", "A tap", "A tap is attached to the wall.", "You try to remove it from the wall but it is stuck.");
 ROOM_BATHROOM.addItem(ITEM_SINK);
 
 var ROOM_RED = new Room("Red", "You are in the computer lab Red.", "To the north is the computer lab Orange.");
