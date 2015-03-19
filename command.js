@@ -1,5 +1,5 @@
 // Define dictionairy
-var commands = ["go", "walk","move", "take", "grab", "pick", "grip", "drop", "leave", "look", "inventory", "check", "examine", "inspect"];
+var commands = ["go", "walk", "take", "grab", "pick", "grip", "drop", "leave", "look", "inventory", "check", "examine", "inspect"];
 var GLOBAL_ACTIONS = [];
 var conjunction = ["and", "then"];
 var prepositions = ["to", "a", "the", "out", "up"];
@@ -107,10 +107,9 @@ function executeCommand(command, params) {
 	switch(command) {
 		case "go":
 		case "walk":
-		case "move":
 		var newRoom = PLAYER.currentRoom.getRoomFromExit(params[0]);
 		if(newRoom == undefined) {
-			reply("Not possible...");
+			reply("You cannot go there...");
 			return;
 		}
 		if(newRoom.locked != "open") {
@@ -191,10 +190,10 @@ function executeCommand(command, params) {
 			}else {
 				var item = getItemIfReachable(params[0]);
 				if(item != null) {
-					reply(item.desc);
+					reply(item.description);
 					return;
 				} else {
-					reply("That is just absurd!");
+					reply("There is no item like that one around here...");
 					return;
 				}
 			}

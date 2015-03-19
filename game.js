@@ -20,9 +20,8 @@ $(document).ready(function() {
 		var split_input = input.replace(/[^a-z ]/ig, "").toLowerCase().split(" ");
 		
 		// Do work
-		if(processCommand(split_input)) {
-			reply(PLAYER.getRoomDescription());
-		}
+		processCommand(split_input);
+
 	});
 });
 

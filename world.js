@@ -4,7 +4,7 @@
 // ==== CORRIDOR ====
 var ROOM_CORRIDOR = new Room ("Corridor", "You are in the corridor. Just a plain corridor, nothing special.",
 	"To the south is the bathroom, to the west is the computer lab called “Orange”, to the north is the lecture hall.");
-
+var ITEM_PEN = new Item("Pen", "A nice pen.", "A pen is visible in one of the corners of the room.", "yes");
 /* = ITEM_BOX = */
 var ITEM_BOX = new Item("Box", "A very large box.", "A large box is blocking your way into the lecture hall, there might be a way to break it.", "Too heavy!");
 ITEM_BOX.addAction("move", function() {
@@ -33,11 +33,13 @@ ITEM_BOX.addAction("break", function(params) {
 });
 ITEM_BOX.addAction("smash", ITEM_BOX.actions["break"]);
 ROOM_CORRIDOR.addItem(ITEM_BOX);
+ROOM_CORRIDOR.addItem(ITEM_PEN);
 
 var ITEM_NERD = new Item("nerd", "A nerd.", "Some nerd is programming on his Macbook. What a hipster. Better keep it down though, wouldn’t want to disturb him.", "Are you out of your mind?!");
 ITEM_NERD.addAction("talk", function() {
 	reply("The nerd glares at you, mumbles something about the KTH code of honor and then gets back to his programming.");
 });
+ITEM_NERD.addAction("speak", ITEM_NERD.actions["talk"]);
 ITEM_NERD.addAction("attack", function(params) {
 	if(!isMentioned("with", params)) {
 		// No with
