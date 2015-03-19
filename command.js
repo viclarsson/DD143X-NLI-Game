@@ -53,7 +53,7 @@ function processCommand(stringArray) {
 	QUEUED_ACTION = null;
 	ADDITIONAL_PARAMS = [];
 	length = stringArray.length
-	console.log(stringArray);
+	//console.log(stringArray);
 
 	// Iterate through
 	for(var i = 0; i < length;i++) {
@@ -85,8 +85,8 @@ function processCommand(stringArray) {
 }
 
 function executeAction(command, params, itemInRoomOrPlayer) {
-	console.log("Action: " + command + ", " + params);
-	console.log(PREVIOUS_COMMAND_OR_ACTION);
+	//console.log("Action: " + command + ", " + params);
+	//console.log(PREVIOUS_COMMAND_OR_ACTION);
 	var item = null;
 	// Try to find items
 	for(i in params) {
@@ -142,7 +142,7 @@ function executeCommand(command, params) {
 			reply("You took the " + item.getName() + ".");
 			if(item.getName() == "bottle") {
 				DATE = new Date();
-				console.log("Took bottle: " + DATE.getHours() + ":" + DATE.getMinutes() + ":" + DATE.getSeconds());
+				console.log("TOOK BOTTLE: " + DATE.getHours() + ":" + DATE.getMinutes() + ":" + DATE.getSeconds());
 			}
 		} else {
 			reply(item.takeable);
@@ -164,7 +164,6 @@ function executeCommand(command, params) {
 		break;
 		case "inventory":
 		var inventoryList =  PLAYER.getInventoryList();
-		console.log("/" + inventoryList + "/");
 		if(inventoryList == "") {
 			reply("You don't have anything on you.");
 		} else {

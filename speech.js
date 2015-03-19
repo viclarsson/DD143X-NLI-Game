@@ -21,7 +21,6 @@
 
             recognition.onstart = function() {
             	recognizing = true;
-            	console.log('Speak slowly and clearly');
             	$('#startSpeech').html('Release space to end speech input');
             };
 
@@ -58,7 +57,7 @@
                 // MADE IT MORE CONFUSING BECAUSE DELAY
                 //$("#speak").val(interimTranscript);
 
-                console.log("interim:  " + interimTranscript);
+                //console.log("interim:  " + interimTranscript);
 
                 // update the page
                 if(finalTranscript.length > 0) {
@@ -75,7 +74,6 @@
                     $('#startSpeech').html('Hold space to talk!');
                 } else {
                     USE_SPEECH = false;
-
                     $(this).html("Speech disabled!");
                 }
             });
@@ -83,7 +81,7 @@
             document.onkeydown = function(e) {
                 if(USE_SPEECH) {
                     if (e.keyCode == 0 || e.keyCode == 32) {
-                        console.log('Space down!');
+                        // console.log('Space down!');
                         if(!recognizing) {
                             recognizing = true;
                             finalTranscript = '';
@@ -94,7 +92,7 @@
                     if(PREVIOUSKEYID != 8 && PREVIOUSKEYID != 46) {
                         BACKSPACE_ERRORS++;
                         $("#error-count").html(BACKSPACE_ERRORS);
-                        console.log("Added error! Total: " + BACKSPACE_ERRORS);
+                        //console.log("Added error! Total: " + BACKSPACE_ERRORS);
                     }
                 }
                 PREVIOUSKEYID = e.keyCode;
