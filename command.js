@@ -1,8 +1,8 @@
 // Define dictionairy
-var commands = ["go", "walk", "take", "grab", "drop", "leave", "look", "inventory", "check"];
+var commands = ["go", "walk","move", "take", "grab", "pick", "grip", "drop", "leave", "look", "inventory", "check", "examine", "inspect"];
 var GLOBAL_ACTIONS = [];
 var conjunction = ["and", "then"];
-var prepositions = ["to", "a", "the", "out"];
+var prepositions = ["to", "a", "the", "out", "up"];
 
 // For answeing to "with what";
 var PREVIOUS_COMMAND_OR_ACTION = null;
@@ -11,11 +11,17 @@ var ON_ITEM = null;
 var ITEM_IN_ROOM_OR_PLAYER = null;
 var QUEUED_ACTION = null;
 var ADDITIONAL_PARAMS = [];
+var DATE = null;
 
 function processCommand(stringArray) {
 	var length = stringArray.length;
 	var word = null;
-	var replyConfused = false;
+	var nothing = true;
+
+	if(DATE == null) {
+		DATE = new Date();
+		console.log("STARTED: " + DATE.getHours() + ":" + DATE.getMinutes() + ":" + DATE.getSeconds());
+	}
 
 	// Remove prepositions
 	var tmp = []
@@ -24,6 +30,14 @@ function processCommand(stringArray) {
 			tmp.push(stringArray[i]);
 		}
 	}
+	length = stringArray.length;
+	// Remove if clear is used
+	for(var i = 0; i < length;i++) {
+		if(stringArray[i] == "clear") {
+			tmp = tmp.splice(i, length);
+		}
+	}
+
 	stringArray = tmp;
 	// If an action requests an item and then make a new complete request string
 	if(QUEUED_ACTION != null && !isMentioned(stringArray[0], GLOBAL_ACTIONS) && !isMentioned(stringArray[0], commands)) {
@@ -47,23 +61,23 @@ function processCommand(stringArray) {
 		if($.inArray(word, commands) != -1) {
 			executeCommand(word, stringArray.slice(i+1, length));
 			PREVIOUS_COMMAND_OR_ACTION = word;
+			nothing = false;
 			// Executed command
 		} else if($.inArray(word, conjunction) != -1) {
 			var doNothing = null; //Dummy
-		}
-		if(executeAction(word, stringArray.slice(i+1, length))) {
+		} else if(executeAction(word, stringArray.slice(i+1, length))) {
 			// Executed action!
 			PREVIOUS_COMMAND_OR_ACTION = word;
-		} else {
-			//replyConfused = true;
-			PREVIOUS_COMMAND_OR_ACTION = word;
+			nothing = false;
+		} else if(word == null) {
+			maybeError = true;
 		}
 		if(WITH_ITEM != null) {
 			reply("Wow, you have to so much to say, I like that, but sometimes it is too much...");
 			return;
 		}
 	}
-	if(replyConfused) {
+	if(nothing) {
 		reply("I didn't understand all of that...");
 	}
 	// Scroll to bottom
@@ -93,6 +107,7 @@ function executeCommand(command, params) {
 	switch(command) {
 		case "go":
 		case "walk":
+		case "move":
 		var newRoom = PLAYER.currentRoom.getRoomFromExit(params[0]);
 		if(newRoom == undefined) {
 			reply("Not possible...");
@@ -104,9 +119,15 @@ function executeCommand(command, params) {
 		}
 		PLAYER.currentRoom = newRoom;
 		reply(PLAYER.currentRoom.getFullDesc());
+		if(PLAYER.currentRoom == ROOM_LECTUREHALL) {
+			DATE = new Date();
+			console.log("ENDED: " + DATE.getHours() + ":" + DATE.getMinutes() + ":" + DATE.getSeconds());
+		}
 		break;
 		case "take":
 		case "grab":
+		case "pick": // pick up is possible
+		case "grip":
 		if(params[0] == "all") {
 			reply("You have to take all items seperately.");
 			return;
@@ -120,6 +141,10 @@ function executeCommand(command, params) {
 			PLAYER.addItem(item);
 			PLAYER.currentRoom.removeItem(item);
 			reply("You took the " + item.getName() + ".");
+			if(item.getName() == "bottle") {
+				DATE = new Date();
+				console.log("Took bottle: " + DATE.getHours() + ":" + DATE.getMinutes() + ":" + DATE.getSeconds());
+			}
 		} else {
 			reply(item.takeable);
 		}
@@ -149,6 +174,8 @@ function executeCommand(command, params) {
 		return;
 		break;
 		case "check":
+		case "examine":
+		case "inspect":
 		if(params[0] == undefined) {
 			reply("Check what?");
 			setQueuedAction("check", null, []);

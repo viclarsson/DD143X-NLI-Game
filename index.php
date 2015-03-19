@@ -12,7 +12,7 @@
 	<title>A simple NLI-based game</title>
 	<meta name="keywords" content="">
 	<meta name="description" content="">
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="style.css?version=<?php echo uniqid(); ?>">
 </head>
 <body>
 	<button id="startSpeech">Speech disabled!</button>
@@ -27,7 +27,7 @@
 	</section>
 
 	<footer>
-		Developed by Victor Larsson & Jesper Qvarfordt, 2015 for DD143X (Version <?php echo uniqid(); ?>)
+		Developed by Victor Larsson & Jesper Qvarfordt, 2015 for DD143X (Version <?php echo uniqid(); ?>) <span class="hidden" id="error-count"></span>
 	</footer>
 
 

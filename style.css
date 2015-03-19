@@ -54,3 +54,8 @@ footer {
 	font-size: 0.75em;
 	clear: both;
 }
+
+#error-count {
+	color: rgba(255,255,255,0.1) !important;
+	font-size: 0.75em;
+}

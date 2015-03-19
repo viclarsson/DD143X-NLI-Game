@@ -1,6 +1,8 @@
  var finalTranscript = '';
  var recognizing = false;
  var USE_SPEECH = false;
+ var BACKSPACE_ERRORS = 0;
+ var PREVIOUSKEYID = null;
 
  $(document).ready(function() {
 
@@ -52,6 +54,10 @@
                 		interimTranscript += event.results[i][0].transcript;
                 	}
                 }
+
+                // MADE IT MORE CONFUSING BECAUSE DELAY
+                //$("#speak").val(interimTranscript);
+
                 console.log("interim:  " + interimTranscript);
 
                 // update the page
@@ -66,7 +72,7 @@
             	e.preventDefault();
                 if(!USE_SPEECH) {
                     USE_SPEECH = true;
-                     $('#startSpeech').html('Hold space to talk!');
+                    $('#startSpeech').html('Hold space to talk!');
                 } else {
                     USE_SPEECH = false;
 
@@ -84,14 +90,21 @@
                             recognition.start();
                         }
                     }
+                } else if(e.keyCode == 8 || e.keyCode == 46) {
+                    if(PREVIOUSKEYID != 8 && PREVIOUSKEYID != 46) {
+                        BACKSPACE_ERRORS++;
+                        $("#error-count").html(BACKSPACE_ERRORS);
+                        console.log("Added error! Total: " + BACKSPACE_ERRORS);
+                    }
                 }
+                PREVIOUSKEYID = e.keyCode;
             }
             document.onkeyup = function(e) {
                 if(USE_SPEECH) {
-                 finalTranscript = '';
-                 recognizing = false;
-                 recognition.stop();
-             }
-         }
-     }
- });
+                   finalTranscript = '';
+                   recognizing = false;
+                   recognition.stop();
+               }
+           }
+       }
+   });

@@ -149,6 +149,8 @@ ITEM_MICHAEL.addAction("give", function(params){
 				PLAYER.removeItem(ITEM_BOTTLE);
 				PLAYER.addItem(ITEM_KEY);
 				ROOM_RED.setLockedText("open");
+				DATE = new Date();
+				console.log("GIVE BOTTLE: " + DATE.getHours() + ":" + DATE.getMinutes() + ":" + DATE.getSeconds());
 				return;
 			}
 		} else {
@@ -174,7 +176,7 @@ var ITEM_TOILET = new Item("Toilet", "A toilet", "There is a toilet bowl by the 
 ROOM_BATHROOM.addItem(ITEM_TOILET);
 
 var ITEM_TAP = new Item("Tap", "A tap", "A tap is attached to the wall.", "You try to remove it from the wall but it is stuck.");
-ROOM_BATHROOM.addItem(ITEM_SINK);
+ROOM_BATHROOM.addItem(ITEM_TAP);
 
 var ROOM_RED = new Room("Red", "You are in the computer lab Red.", "To the north is the computer lab Orange.");
 ROOM_RED.setLockedText("You need a key to enter this room...");
